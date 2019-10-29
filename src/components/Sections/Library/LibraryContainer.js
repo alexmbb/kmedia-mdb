@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useContext } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { bindActionCreators } from 'redux';
@@ -20,8 +20,6 @@ import LibraryContentContainer from './LibraryContentContainer';
 import TOC from './TOC';
 import LibrarySettings from './LibrarySettings';
 import Share from './Share';
-import { isLanguageRtl } from "../../../helpers/i18n-utils";
-import { DeviceInfoContext } from "../../../helpers/app-contexts";
 
 class LibraryContainer extends Component {
   static contextType = DeviceInfoContext;
@@ -361,9 +359,7 @@ class LibraryContainer extends Component {
         match,
       }               = this.state;
     const matchString = this.matchString(parentId, t);
-
-    const isRtl = isLanguageRtl(language);
-    const position = isRtl ? 'left' : 'right';
+    const { isMobileDevice } = useContext(DeviceInfoContext);
 
     return (
       <div
@@ -406,7 +402,7 @@ class LibraryContainer extends Component {
                       <LibrarySettings fontSize={fontSize} handleSettings={this.handleSettings} />
                       <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
                       <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
-                      <Share position={position} />
+                      <Share isMobile={isMobileDevice} />
                     </div>
                   </Grid.Column>
                 </Grid.Row>
