@@ -1,4 +1,4 @@
-import React, { Component, useContext } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { bindActionCreators } from 'redux';
@@ -20,6 +20,7 @@ import LibraryContentContainer from './LibraryContentContainer';
 import TOC from './TOC';
 import LibrarySettings from './LibrarySettings';
 import Share from './Share';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 class LibraryContainer extends Component {
   static contextType = DeviceInfoContext;
@@ -357,9 +358,9 @@ class LibraryContainer extends Component {
         fontType,
         tocIsActive,
         match,
-      }               = this.state;
-    const matchString = this.matchString(parentId, t);
-    const { isMobileDevice } = useContext(DeviceInfoContext);
+      }                      = this.state;
+    const matchString        = this.matchString(parentId, t);
+    const { isMobileDevice } = this.context;
 
     return (
       <div
