@@ -159,6 +159,8 @@
       "second": "You can choose other content languages"
     },
     "didYouMean": "Querías decir: ",
+    "showingFPR ": "Mostrando los resultados para ",
+    "searchInsteadFPR": "Buscar en su lugar ",
     "sortby": "ordenar por",
     "sorts": {
       "relevance": "Relevante",
