@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { Trans, withNamespaces } from 'react-i18next';
-import { connect } from 'react-redux';
-import { Button, Container, Divider, Grid, Image, Message } from 'semantic-ui-react';
+import {Trans, withNamespaces} from 'react-i18next';
+import {connect} from 'react-redux';
+import {Button, Container, Divider, Grid, Image, Message} from 'semantic-ui-react';
 
-import { SEARCH_GRAMMAR_HIT_TYPES, SEARCH_INTENT_HIT_TYPES } from '../../helpers/consts';
-import { isEmpty } from '../../helpers/utils';
-import { getQuery } from '../../helpers/url';
-import { selectors as settings } from '../../redux/modules/settings';
-import { selectors as filterSelectors } from '../../redux/modules/filters';
-import { selectors as sourcesSelectors } from '../../redux/modules/sources';
-import { selectors as tagsSelectors } from '../../redux/modules/tags';
-import { filtersTransformer } from '../../filters';
+import {SEARCH_GRAMMAR_HIT_TYPES, SEARCH_INTENT_HIT_TYPES} from '../../helpers/consts';
+import {isEmpty} from '../../helpers/utils';
+import {getQuery} from '../../helpers/url';
+import {selectors as settings} from '../../redux/modules/settings';
+import {selectors as filterSelectors} from '../../redux/modules/filters';
+import {selectors as sourcesSelectors} from '../../redux/modules/sources';
+import {selectors as tagsSelectors} from '../../redux/modules/tags';
+import {filtersTransformer} from '../../filters';
 import * as shapes from '../shapes';
 import WipErr from '../shared/WipErr/WipErr';
 import Pagination from '../Pagination/Pagination';
@@ -24,7 +24,8 @@ import SearchResultTwitters from './SearchResultTwitters';
 import SearchResultSource from './SearchResultSource';
 import SearchResultPost from './SearchResultPost';
 import DidYouMean from './DidYouMean';
-import { SectionLogo } from '../../helpers/images';
+import {SectionLogo} from '../../helpers/images';
+import FullPageReplacement from "./FullPageReplacement";
 
 class SearchResults extends Component {
   static propTypes = {
@@ -85,15 +86,15 @@ class SearchResults extends Component {
   };
 
   filterByHitType = (hit) => {
-    const { hitType } = this.props;
+    const {hitType} = this.props;
     return hitType ? hit.type === hitType : true;
   };
 
   renderHit = (hit, rank) => {
-    const { cMap, cuMap, postMap }                                                                          = this.props;
-    const { _source: { mdb_uid: mdbUid, result_type: resultType, landing_page: landingPage }, _type: type } = hit;
+    const {cMap, cuMap, postMap} = this.props;
+    const {_source: {mdb_uid: mdbUid, result_type: resultType, landing_page: landingPage}, _type: type} = hit;
 
-    const props = { ...this.props, hit, rank, key: `${mdbUid || landingPage}_${type}` };
+    const props = {...this.props, hit, rank, key: `${mdbUid || landingPage}_${type}`};
 
     if (SEARCH_GRAMMAR_HIT_TYPES.includes(type)) {
       return <SearchResultLandingPage {...props} />;
@@ -109,16 +110,16 @@ class SearchResults extends Component {
     }
 
     let result = null;
-    const cu   = cuMap[mdbUid];
-    const c    = cMap[mdbUid];
-    const p    = postMap[mdbUid];
+    const cu = cuMap[mdbUid];
+    const c = cMap[mdbUid];
+    const p = postMap[mdbUid];
 
     if (cu) {
-      result = <SearchResultCU {...props} cu={cu} />;
+      result = <SearchResultCU {...props} cu={cu}/>;
     } else if (c) {
       result = <SearchResultCollection c={c} {...props} />;
     } else if (p) {
-      return <SearchResultPost {...props} post={p} />;
+      return <SearchResultPost {...props} post={p}/>;
     } else if (resultType === 'sources') {
       result = <SearchResultSource {...props} />;
     }
@@ -128,26 +129,26 @@ class SearchResults extends Component {
     return result;
   };
 
-  hideNote = () => this.setState({ showNote: false });
+  hideNote = () => this.setState({showNote: false});
 
   renderTopNote = () => {
-    const { t, contentLanguage } = this.props;
-    const language               = t(`constants.languages.${contentLanguage}`);
+    const {t, contentLanguage} = this.props;
+    const language = t(`constants.languages.${contentLanguage}`);
     return (
       this.state.showNote
         ? (
           <Message info className="search-result-note">
             <Image floated="left">
-              <SectionLogo name='info' />
+              <SectionLogo name='info'/>
             </Image>
-            <Button floated="right" icon="close" size="tiny" circular onClick={this.hideNote} />
+            <Button floated="right" icon="close" size="tiny" circular onClick={this.hideNote}/>
             <Container>
               <strong>
                 {t('search.topNote.tip')}
                 :
                 {' '}
               </strong>
-              {t('search.topNote.first', { language })}
+              {t('search.topNote.first', {language})}
             </Container>
             <Container>{t('search.topNote.second')}</Container>
           </Message>
@@ -172,7 +173,7 @@ class SearchResults extends Component {
         location,
       } = this.props;
 
-    const wipErr = WipErr({ wip: wip || !areSourcesLoaded, err, t });
+    const wipErr = WipErr({wip: wip || !areSourcesLoaded, err, t});
     if (wipErr) {
       return wipErr;
     }
@@ -184,22 +185,22 @@ class SearchResults extends Component {
       return <div>{t('search.results.empty-query')}</div>;
     }
 
-    const { search_result: results, typo_suggest } = queryResult;
+    const {search_result: results, suggest_result} = queryResult;
 
     if (isEmpty(results)) {
       return null;
     }
 
-    const { /* took, */ hits: { total, hits } } = results;
+    const { /* took, */ hits: {total, hits}} = results;
     // Elastic too slow and might fails on more than 1k results.
-    const totalForPagination                    = Math.min(1000, total);
+    const totalForPagination = Math.min(1000, total);
 
     let content;
     if (total === 0) {
       content = (
         <Trans i18nKey="search.results.no-results">
           Your search for
-          <strong style={{ fontStyle: 'italic' }}>{{ query }}</strong>
+          <strong style={{fontStyle: 'italic'}}>{{query}}</strong>
           found no results.
         </Trans>
       );
@@ -208,16 +209,18 @@ class SearchResults extends Component {
         <Grid>
           <Grid.Column key="1" computer={12} tablet={16} mobile={16}>
             {/* Requested by Mizrahi this.renderTopNote() */}
-            { typo_suggest 
-              ? <DidYouMean typo_suggest={typo_suggest} /> 
-              : null 
+            {suggest_result ?
+              suggest_result.is_fpr ?
+                <FullPageReplacement term={suggest_result.term} source_term={suggest_result.source_term}/>
+                : <DidYouMean typo_suggest={suggest_result.term}/>
+              : null
             }
 
             <div className="searchResult_content">
-              <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t} />
+              <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t}/>
               {hits.filter(this.filterByHitType).map(this.renderHit)}
             </div>
-            <Divider fitted />
+            <Divider fitted/>
 
             <Container className="padded pagination-wrapper" textAlign="center">
               <Pagination
@@ -229,7 +232,7 @@ class SearchResults extends Component {
               />
             </Container>
           </Grid.Column>
-          <Grid.Column key="2" />
+          <Grid.Column key="2"/>
         </Grid>
       );
     }

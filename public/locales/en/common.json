@@ -160,6 +160,8 @@
       "second": "You can choose other content languages"
     },
     "didYouMean": "Did you mean: ",
+    "showingFPR ": "Showing results for ",
+    "searchInsteadFPR": "Search instead for ",
     "showAll": "Show All",
     "lessons": "Lessons",
     "programs": "Programs",
