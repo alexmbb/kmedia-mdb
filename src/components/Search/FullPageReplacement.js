@@ -16,7 +16,7 @@ const FullPageReplacement = ({source_term, term, t}) => {
       </div>
       <small>
         {t('search.searchInsteadFPR')}
-        <a href={`?q=${source_term}`} className="search__link">{source_term}</a>
+        <a href={`?q=${source_term}&checkTypo=false`} className="search__link">{source_term}</a>
       </small>
     </Container>
   );
